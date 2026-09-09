@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>$if(title)$$title$$else$Migration Guide (DRAFT)$endif$</title>
+<title>$if(title)$$title$$else$Migration Guide$endif$</title>
 <style>
 :root {
   --bg: #ffffff;
@@ -45,25 +45,6 @@ body {
   font-size: 16px;
   line-height: 1.6;
 }
-
-/* ---- draft banner ---- */
-.draft-banner {
-  background: var(--accent);
-  color: var(--accent-fg);
-  padding: 0.85rem 1.25rem;
-  font-weight: 700;
-  text-align: center;
-  letter-spacing: 0.02em;
-}
-.draft-banner a { color: var(--accent-fg); text-decoration: underline; }
-.draft-detail {
-  background: var(--warn-bg);
-  border-left: 4px solid var(--warn-rule);
-  padding: 1rem 1.25rem;
-  margin: 1.5rem 0 2.5rem;
-  font-size: 0.95rem;
-}
-.draft-detail p { margin: 0.4rem 0; }
 
 /* ---- layout ---- */
 .layout { display: flex; align-items: flex-start; }
@@ -183,10 +164,6 @@ $endfor$
 </head>
 <body id="top">
 
-<div class="draft-banner">
-  &#9888;&#65039; DRAFT &mdash; WORK IN PROGRESS &mdash; NOT FOR CUSTOMER USE
-</div>
-
 <div class="layout">
 $if(toc)$
 <nav id="TOC" role="doc-toc">
@@ -195,13 +172,6 @@ $table-of-contents$
 $endif$
 
 <main>
-
-<div class="draft-detail">
-  <p><strong>This document is an unfinished internal draft. Do not share it with customers, and do not use it to perform a migration.</strong></p>
-  <p><strong>OpenShift AI 3.5 has not been released.</strong> The current release of Red Hat OpenShift AI is <strong>3.4</strong>. Everything on this page describes a future version and is subject to change without notice.</p>
-  <p>For a real 2.25 migration, use the official Red Hat documentation instead:
-  <a href="https://access.redhat.com/articles/7133758?extIdCarryOver=true&amp;sc_cid=RHCTG0180000382538">Migrating from Red Hat OpenShift AI 2.25 (access.redhat.com)</a>.</p>
-</div>
 
 $body$
 

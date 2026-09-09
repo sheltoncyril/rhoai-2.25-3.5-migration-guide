@@ -36,7 +36,9 @@ while IFS= read -r line; do
 
     echo "Resolving $key ($image_tag)..." >&2
 
-    raw=$(timeout "${TIMEOUT}" skopeo inspect --override-arch amd64 --override-os linux \
+    # Use skopeo's own --command-timeout rather than coreutils `timeout`, which
+    # is not present on macOS.
+    raw=$(skopeo --command-timeout "${TIMEOUT}s" inspect --override-arch amd64 --override-os linux \
         "docker://$image_tag" 2>/dev/null || true)
 
     if [[ -n "$raw" ]]; then

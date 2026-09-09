@@ -39,7 +39,7 @@ pandoc \
     --lua-filter="$SCRIPT_DIR/pandoc/unlisted-empty-headings.lua" \
     --toc --toc-depth=3 \
     --wrap=preserve \
-    --metadata title="Migrate from OpenShift AI 2.25 to 3.5 (DRAFT)" \
+    --metadata title="Migrate from OpenShift AI 2.25 to 3.5" \
     --metadata sourcefile="$(basename "$SRC")" \
     --metadata buildstamp="$buildstamp" \
     --metadata commit="$commit" \
