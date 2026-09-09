@@ -1,4 +1,4 @@
-# **Migrate from OpenShift AI 2.25.10  (and later) to 3.5 (latest) DRAFT** 
+# **Migrate from OpenShift AI 2.25.10  (and later) to 3.5 (latest)** 
 
 #### **Migrate from Red Hat OpenShift AI 2.25.10 (and later) to OpenShift AI 3.5 (latest)**  
 
@@ -297,7 +297,7 @@ To prepare for the migration of OpenShift AI 2.25.10 (and later) to 3.5,  deploy
 
 * As part of the pod configuration, specify the rhai-cli container image.
 
-  The container image is available at quay.io/rhoai/odh-cli-rhel9@sha256:edc0ebe9ffeac42b9dd4d34ed3d11753b40fc33a2c4824e15aef059a536241b0.
+  The container image is available at quay.io/rhoai/odh-cli-rhel9@sha256:e86347b0e1569c579eb15849ef19e83584df68e68561d1beebd628558d05b731.
 
   This image contains the Red Hat AI command line interface(**rhai-cli)** utility that includes the migration assessment linting CLI and migration actions to assist with pre-upgrade and post-upgrade steps for the Model Serving, Workbenches, TrustyAI, Llama Stack / OGX, AI Pipelines, and Ray Training Operator components.
 
@@ -342,7 +342,7 @@ To prepare for the migration of OpenShift AI 2.25.10 (and later) to 3.5,  deploy
        spec:
          containers:
            - name: rhai-cli
-             image: quay.io/rhoai/odh-cli-rhel9@sha256:edc0ebe9ffeac42b9dd4d34ed3d11753b40fc33a2c4824e15aef059a536241b0
+             image: quay.io/rhoai/odh-cli-rhel9@sha256:e86347b0e1569c579eb15849ef19e83584df68e68561d1beebd628558d05b731
              command:
                - sleep
                - infinity
@@ -442,7 +442,7 @@ Authentication for the cluster is handled when you log in from inside the pod. T
 
 ### **1.3.2. About the rhai-cli container image** {#1.3.2.-about-the-rhai-cli-container-image}
 
-The container image is available at **quay.io/rhoai/odh-cli-rhel9@sha256:edc0ebe9ffeac42b9dd4d34ed3d11753b40fc33a2c4824e15aef059a536241b0**. It contains the migration assessment linting CLI and migration actions for specific component migrations.
+The container image is available at **quay.io/rhoai/odh-cli-rhel9@sha256:e86347b0e1569c579eb15849ef19e83584df68e68561d1beebd628558d05b731**. It contains the migration assessment linting CLI and migration actions for specific component migrations.
 
 For details about the container image, including versions, see the [**rhoai/rhai-cli-rhel9** page in the Red Hat Ecosystem Catalog](https://catalog.redhat.com/en/software/containers/rhoai/rhai-cli-rhel9/69a580e6a46d08df99bffe08?image=69a7dc1675d4eb16e91cb5de).
 
@@ -5547,6 +5547,22 @@ After you upgrade Red Hat OpenShift AI 2.25.10 (and later) to 3.5, any running P
 **Note**
 
 The Kubeflow Training Operator (KFTO) v1 is deprecated starting with theOpenShift AI 2.25.10 (and later) and is planned to be removed in a future release. This deprecation is part of the OpenShift AI transition to Kubeflow Trainer v2, which delivers enhanced capabilities and improved functionality.
+
+**Important — Training job RBAC change in OpenShift AI 3.x**
+
+Starting with OpenShift AI 3.4 (and included in 3.5), training job permissions (**PyTorchJob**, **TFJob**, **MPIJob**, **XGBoostJob**, **PaddleJob**) are no longer aggregated into the standard Kubernetes `edit` and `admin` ClusterRoles. This change was made to address security vulnerabilities [CVE-2026-18951](https://access.redhat.com/security/cve/cve-2026-18951) and [CVE-2026-18982](https://access.redhat.com/security/cve/cve-2026-18982), which allowed any namespace editor to create training jobs with arbitrary pod configurations, enabling potential privilege escalation.
+
+**Impact:** Users who previously created training jobs using the `edit` or `admin` ClusterRole will no longer have permission to create, update, or delete training jobs after the upgrade. They will retain read-only access (`get`, `list`, `watch`).
+
+**Action required:** Cluster administrators must create explicit **RoleBindings** to grant training job permissions to users who need them. For example, to grant a user full training job access in a namespace:
+
+```bash
+oc adm policy add-role-to-user kueue-pytorchjob-editor-role <username> -n <namespace> --role-namespace=""
+```
+
+Alternatively, create a custom ClusterRole that includes the required training job verbs and bind it to the appropriate users or groups.
+
+For more information about the security vulnerabilities, see [CVE-2026-18951](https://access.redhat.com/security/cve/cve-2026-18951) and [CVE-2026-18982](https://access.redhat.com/security/cve/cve-2026-18982).
 
 **Prerequisites**
 

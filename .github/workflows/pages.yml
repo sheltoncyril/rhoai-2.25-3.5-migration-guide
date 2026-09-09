@@ -51,8 +51,10 @@ jobs:
         run: |
           page=site/index.html
           test -s "$page" || { echo "::error::$page is missing or empty"; exit 1; }
-          grep -q "NOT FOR CUSTOMER USE" "$page" \
-            || { echo "::error::draft notice missing from rendered page"; exit 1; }
+          grep -q "Migrate from OpenShift AI" "$page" \
+            || { echo "::error::rendered page is missing the guide's title heading"; exit 1; }
+          grep -q 'id="TOC"' "$page" \
+            || { echo "::error::rendered page is missing the table of contents"; exit 1; }
           if grep -qE '\{\{[A-Z_]+\}\}' "$page"; then
             echo "::error::unresolved image placeholders in rendered page"
             grep -oE '\{\{[A-Z_]+\}\}' "$page" | sort -u
